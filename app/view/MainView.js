@@ -10,6 +10,8 @@ Ext.define('PracticeBrain.view.MainView',{
 	controllers:['Start'],
 
 	initialize:function(){
+	    var Main = this;
+
 	    var tabPanel = {
             	xtype: 'tabpanel',
             	fullscreen: true,
@@ -77,19 +79,29 @@ Ext.define('PracticeBrain.view.MainView',{
                     			   {
                         			xtype: 'togglefield',
                         			name: 'sound',
+						ui:'action',
 						id:'soundset',
-                        			value: 1,
+                        			value: 0,
 						listeners:{
 							change:function(){
+								console.log('onoff');
 								var onoff = Ext.getCmp('soundset').getValue();
 								var store = Ext.getStore('BrainStore');
 								var model = store.findRecord('id',0);
 								if(model==null)
 									console.log('empty model');
-								console.log(onoff);
 								model.set('sound',onoff);
-							}
+
+								if(onoff==true)
+								{
+									console.log('sound on');
+									Main.fireEvent('playsound');
+								}else{
+									console.log('sound off');
+									Main.fireEvent('stopsound');
+								}
 						}
+					}
                    			   }
                 			]
 				   },
@@ -122,14 +134,54 @@ Ext.define('PracticeBrain.view.MainView',{
 	    Ext.Viewport.add(tabPanel);
 	    /*Insert delay due to UI display problem*/
 	    var duration1 = 100; // = 0.1 seconds
+	    var Main = this;
 	    window.setTimeout(function() {
+
 		Ext.Viewport.setActiveItem(tabPanel);
-	    }, duration1);	
+	    }, duration1);
+    	    
+	     var duration1 = 2000; // = 2 seconds
+	     var Main = this;
+	     window.setTimeout(function(){
+		var store = Ext.getStore('BrainStore');
+	        var model = store.findRecord('id',0);
+	        if(model.get('sound')==true)
+		   Main.fireEvent('playsound');
+	        else
+		   console.log('off bgsound');
+	     }, duration1);
 	},
 
+	launch: function(){
+		var store = Ext.getStore('BrainStore');
+		var model = store.findRecord('id',0);
+		if(model.get('sound')==true)
+			this.playSound();
+		else
+			console.log('off bgsound');
+	},
 
 	onStartButton:function(){
 		console.log('startbutton');
 		this.fireEvent('startgame');
+	},
+
+	onoffSound:function(arg){
+		console.log('onoff');
+		var onoff = arg.getValue();
+		var store = Ext.getStore('BrainStore');
+		var model = store.findRecord('id',0);
+		if(model==null)
+			console.log('empty model');
+		model.set('sound',onoff);
+
+		if(onoff==true)
+		{
+			console.log('sound on');
+			this.fireEvent('playsound');
+		}else{
+			console.log('sound off');
+			this.fireEvent('stopsound');
+		}
 	}
 });
