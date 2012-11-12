@@ -6,12 +6,6 @@ Ext.application({
 	models:['Brain'],
 
 	launch:function(){
-		var mainView={
-			xtype:'mainview'
-		};
-
-		Ext.Viewport.add(mainView);
-
 		var newModel;
 		var store = Ext.getStore('BrainStore');
 		var model = store.findRecord('id',0);
@@ -20,7 +14,7 @@ Ext.application({
 			console.log('generate model');
 			newModel = Ext.create('PracticeBrain.model.Brain');
 			newModel.set('id',0);
-			newModel.set('sound',true);
+			newModel.set('sound',false);
 			newModel.set('difficulty',0);
 			newModel.set('success',false);
 			newModel.set('init',true);
@@ -28,6 +22,11 @@ Ext.application({
 			store.add(newModel);
 			store.sync();
 		}
+		var mainView={
+			xtype:'mainview'
+		};
+
+		Ext.Viewport.add(mainView);
 	},
 
 });
