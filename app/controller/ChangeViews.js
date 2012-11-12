@@ -4,6 +4,11 @@
  *email:james.donghawn.lee@gmail.com
  **/
 
+var audio = new Ext.Audio({
+		enableControls:false,
+		url:'resources/sound/bgsound.mp3',
+		loop:true
+	});
 Ext.define('PracticeBrain.controller.ChangeViews',{
 	extend:'Ext.app.Controller',
 	alias:'ChangeViews',
@@ -12,11 +17,14 @@ Ext.define('PracticeBrain.controller.ChangeViews',{
 		refs:{
 			main:'mainview',
 			start:'startview',
-			question:'questionview'
+			question:'questionview',
+			soundset:'soundset'
 		},
 		control:{
 			main:{
 				startgame:'onStartGame',
+				playsound:'playBGsound',
+				stopsound:'stopBGsound'
 			},
 			start:{
 				goquest:'showQuestions'
@@ -27,6 +35,7 @@ Ext.define('PracticeBrain.controller.ChangeViews',{
 			}
 		}
 	},
+
 	onStartGame: function(){
 		console.log('onStartGame');
 		var startStore = Ext.getStore('BrainStore');
@@ -39,6 +48,7 @@ Ext.define('PracticeBrain.controller.ChangeViews',{
 		Ext.Viewport.add([startview]);
 		Ext.Viewport.setActiveItem(startview);
 	},
+
 	showQuestions: function(a){
 		console.log('onQuestion');
 		var questionview = Ext.create('PracticeBrain.view.QuestionView');
@@ -81,10 +91,21 @@ Ext.define('PracticeBrain.controller.ChangeViews',{
 		
 	},
 
+	playBGsound:function(){
+		console.log('playbgsound');
+		audio.play();
+	},
+
+	stopBGsound:function(){
+		console.log('stopbgsound');
+		audio.pause();
+	},
+
 	launch: function(){
 		this.callParent();
 		console.log('launch');
 	},
+
 	init: function(){
 		this.callParent();
 		console.log('init');
